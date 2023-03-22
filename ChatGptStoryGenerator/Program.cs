@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http;
 using System.Security.Principal;
-//using System.Speech.Synthesis;
 using Microsoft.CognitiveServices.Speech;
+using FFMpegCore;
+using System.Drawing;
+using static System.Net.Mime.MediaTypeNames;
+using ChatGptStoryGenerator;
 
 class Program
 {
@@ -35,7 +38,7 @@ class Program
         Random rand = new Random();
         string topic = topics[rand.Next(topics.Count)];
 
-        // Use Google Custom Search API to search for images related to the topic
+        // Use chatgpt API to generate the story
         string apiKey = "Bearer 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";
         string url = "https://api.openai.com/v1/chat/completions";
 
@@ -56,7 +59,7 @@ class Program
 
             if(response.StatusCode == HttpStatusCode.OK)
             {
-                Console.WriteLine("Woohoo we got a 200 response");
+                Console.WriteLine("\n\nWoohoo we got a 200 response");
             }
 
             var storyContent = await response.Content.ReadAsStringAsync();
@@ -68,35 +71,62 @@ class Program
 
             Console.WriteLine(story);
 
-            var  speechKey = "f5c6b2a2ee8343a6a2a4adf91b8d83c9";
-            var  regionKey = "eastus";
+            string[] strings = story.Split('\n');
+
+            strings = strings.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+            var speechKey = "f5c6b2a2ee8343a6a2a4adf91b8d83c9";
+            var regionKey = "eastus";
 
             var speechConfig = SpeechConfig.FromSubscription(speechKey, regionKey);
 
             speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";
 
-            using (var speechSynthesizer = new SpeechSynthesizer(speechConfig))
+            int count = 0;            
+
+            foreach(string s in strings )
             {
-                var speechResult = await speechSynthesizer.SpeakTextAsync(story);
+                count++;
+                var audioFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}-{count}.wav";
+                var imageFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\cat_1.jpg";
+                var imageWithTextFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\cat_1-with-text.jpg";
+                var videoFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-thing.mp4";
+                var logFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-storylog.txt";
+                var storyPartFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-story.txt";
 
-                Console.WriteLine("Saving the audio to a file");
-                using var stream = AudioDataStream.FromResult(speechResult);
-                await stream.SaveToWaveFileAsync($"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}.wav");
-            }        
+                // create a text file of the current story chunk
+                using (StreamWriter writer = new StreamWriter(logFilePath))
+                {
+                    writer.WriteLine(s);
+                }
 
+                // add the text to the image
+                AddTextToImage.AddTextToStaticImage(s, imageFilePath, imageWithTextFilePath);
+
+                // create the audio file using the micosoft speech synthesizer
+                using (var speechSynthesizer = new SpeechSynthesizer(speechConfig))
+                {
+                    var speechResult = await speechSynthesizer.SpeakTextAsync(s);
+                    Console.WriteLine($"Saving the audio for part {count} of {strings.Length} to a file");
+                    using var stream = AudioDataStream.FromResult(speechResult);
+                    // saving the audio file
+                    await stream.SaveToWaveFileAsync(audioFilePath);
+
+                    stream.Dispose();                                     
+                }
+
+                // create the video that combines the audio and image and text
+                FFMpeg.PosterWithAudio(imageWithTextFilePath, audioFilePath, videoFilePath);
+
+                // delete the images and files once they are no longer needed
+          
+            }
             // track the list of used animals and the date/time associated with each            
             using (StreamWriter writer = new StreamWriter("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\animallog.txt", append: true))
             {             
                 writer.WriteLine($"{topic} - {DateTime.Now}");
-            }
-
-            // track the most recent story
-            using (StreamWriter writer = new StreamWriter("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\storylog.txt"))
-            {
-                writer.WriteLine(story);
-            }
+            }           
         }
-
         Console.WriteLine("Done!");
     }
 }
