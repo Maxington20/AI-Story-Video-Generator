@@ -1,21 +1,25 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO.Enumeration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aspose.Imaging;
 
 namespace ChatGptStoryGenerator
 {
     public static class GoogleImageSearch
     {
-        public static async void SearchAndDownloadImage(string topic)
+        public static async         Task
+SearchAndDownloadImage(string topic, string number)
         {
             // Use Google Custom Search API to search for images related to the topic
             string apiKey = "AIzaSyDMg_4iX_gQd9E7WksgsWdfLMT2D4w9o-I";
             string cx = "11764fb6d23c841e5";
             string imgType = "stock";
-            string url = $"https://www.googleapis.com/customsearch/v1?q=cartoon%20{topic}&cx={cx}&key={apiKey}&searchType=image&imgType={imgType}&num=1";
+            string url = $"https://www.googleapis.com/customsearch/v1?q=cartoon%20{topic}&cx={cx}&key={apiKey}&searchType=image&imgType={imgType}&num={number}&fileType=jpg";
 
             using (var httpClient = new HttpClient())
             {
@@ -44,7 +48,17 @@ namespace ChatGptStoryGenerator
                             await imageContent.CopyToAsync(fileStream);
                         }
                         Console.WriteLine($"Downloaded image: {fileName}");
-                    }
+                    }                  
+
+                    using (Aspose.Imaging.Image image = Aspose.Imaging.Image.Load($"{downloadPath}\\{topic}_{count}.jpg"))
+                    {
+                        var newHeight = image.Height % 2 == 0 ? image.Height : image.Height + 1;
+                        var newWidth = image.Width % 2 == 0 ? image.Width : image.Width + 1;
+
+                        image.Resize(newWidth, newHeight);
+
+                        image.Save($"{downloadPath}\\{topic}_{count}.jpg");
+                    }                 
                     count++;
                 }
             }

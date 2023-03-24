@@ -16,17 +16,14 @@ namespace ChatGptStoryGenerator
 {
     public static class YoutubeUploader
     {
-        public static async void UploadVideo(string title, string description)
-        {
-            // Set the path to the video file.
-            string videoPath = @"C:\path\to\video.mp4";
-
+        public static async void UploadVideo(string title, string description, string videoPath)
+        {                        
             // Set the metadata for the video.
             Video video = new Video();
             video.Snippet = new VideoSnippet();
             video.Snippet.Title = title;
             video.Snippet.Description = description;
-            video.Snippet.ChannelId = "UC7TlFqGEuc0kXcKBwI-THJg";
+            video.Snippet.ChannelId = "UCxcdczLSSuc8a2dWwd25aLg";
             video.Status = new VideoStatus();
             video.Status.PrivacyStatus = "public";
 
@@ -38,9 +35,9 @@ namespace ChatGptStoryGenerator
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     new[] { YouTubeService.Scope.YoutubeUpload },
-                    "user",
+                    "max.herrington@gmail.com",
                     CancellationToken.None,
-                    new FileDataStore("YouTubeUploader")
+                    new FileDataStore("youtube-uploader-app")
                 );
             }
 
@@ -48,7 +45,7 @@ namespace ChatGptStoryGenerator
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "YouTubeUploader"
+                ApplicationName = "youtube-uploader-app"
             });
 
             // Create the video insert request.
@@ -69,5 +66,47 @@ namespace ChatGptStoryGenerator
         {
             Console.WriteLine($"Video id '{video.Id}' was successfully uploaded.");
         }
-    }
+
+        public static async void UploadVideoProper()
+        {
+
+            UserCredential credential;
+
+            using (var stream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\client_secret_71511348519-9r709uh7nuhq1urvlt3slgo3cp2vkhnv.apps.googleusercontent.com.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    new[] { YouTubeService.Scope.YoutubeUpload },
+                    "user",
+                    CancellationToken.None
+                    );
+                    //new FileDataStore("YouTube.Auth.Store")).Result;
+            }
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "YourApplicationName"
+            });
+
+            var video = new Video();
+            video.Snippet = new VideoSnippet();
+            video.Snippet.Title = "Test video";
+            video.Snippet.Description = "This is a test video.";
+            video.Snippet.Tags = new string[] { "test", "video" };
+            video.Snippet.CategoryId = "22"; // See https://developers.google.com/youtube/v3/docs/videoCategories/list
+            video.Status = new VideoStatus();
+            video.Status.PrivacyStatus = "public"; // "private", "public", or "unlisted"
+
+            using (var fileStream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\final-thing.mp4", FileMode.Open))
+            {
+                var videosInsertRequest = youtubeService.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                videosInsertRequest.ProgressChanged += VideosInsertRequest_ProgressChanged;
+                videosInsertRequest.ResponseReceived += VideosInsertRequest_ResponseReceived;
+                var uploadResponse = videosInsertRequest.Upload();
+                Console.WriteLine("Video was successfully uploaded with ID: " + uploadResponse);
+            }
+
+        }
+    }    
 }
