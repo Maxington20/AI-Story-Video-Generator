@@ -83,7 +83,8 @@ class Program
 
         int count = 0;
 
-        await GoogleImageSearch.SearchAndDownloadImage(topic, strings.Length.ToString());
+        // no longer need to download images from google so commenting it out
+        // await GoogleImageSearch.SearchAndDownloadImage(topic, strings.Length.ToString());
 
         foreach(string s in strings )
         {
@@ -98,7 +99,7 @@ class Program
 
             if ( finalPrompt != null )
             {
-                finalPrompt = "a highly detailed, child appropriate cartoon of: " + finalPrompt + " with no words";
+                finalPrompt = "a highly detailed, child appropriate picture of: " + finalPrompt;
             }
 
             // use the prompt to give to midjourney
