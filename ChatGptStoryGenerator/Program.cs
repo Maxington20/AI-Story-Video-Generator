@@ -31,7 +31,9 @@ class Program
         // List of topics to choose from
         List<string> topics = new List<string>
         {
-            "cat", "dog", "ferret", "chinchilla", "pickle", "tomato", "fish", "octopus", "alligator", "snail", "bumblebee", "shark", "whale", "sloth"
+            "cat", "dog", "ferret", "chinchilla", "pickle", "tomato", "fish", "octopus", "alligator", "snail", "bumblebee", "shark", "whale", "sloth",
+            "bear", "horse", "snake", "walrus", "leopard", "lemur", "elk", "deer", "rooster", "zebra", "fish", "parrot", "owl", "pig", "armadillo", "gopher",
+            "beaver", "bat", "seal", "mouse", "eagle", "crab", "rat", "mole", "rabbit"
         };
 
         // Choose a random topic from the list
@@ -69,14 +71,7 @@ class Program
 
         string[] strings = story.Split('\n');
 
-        strings = strings.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
-        var speechKey = "f5c6b2a2ee8343a6a2a4adf91b8d83c9";
-        var regionKey = "eastus";
-
-        var speechConfig = SpeechConfig.FromSubscription(speechKey, regionKey);
-
-        speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";        
+        strings = strings.Where(x => !string.IsNullOrEmpty(x)).ToArray();      
 
         var videoFilePaths = new string[strings.Length];
         var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\final-thing.mp4";
@@ -100,10 +95,7 @@ class Program
             if ( finalPrompt != null )
             {
                 finalPrompt = "a highly detailed, child appropriate picture of: " + finalPrompt;
-            }
-
-            // use the prompt to give to midjourney
-            Console.WriteLine($"\n{finalPrompt}");
+            }           
 
             var chatGPTImagePrompt = await ChatGPTRequest.MakeChatGPTImageGenrationRequest(apiKey, imageUrl, Convert.ToString(finalPrompt));
 
@@ -116,7 +108,6 @@ class Program
 
             var audioFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}-{count}.wav";
             var imageFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\{topic}_{count}.png";
-            //var imageWithTextFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\{topic}_{count}-with-text.jpg";
             var videoFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-thing.mp4";
             var logFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-storylog.txt";
             var storyPartFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{count}-story.txt";
@@ -127,23 +118,11 @@ class Program
                 writer.WriteLine(s);
             }
 
-            // add the text to the image
-            // AddTextToImage.AddTextToStaticImage(s, imageFilePath, imageWithTextFilePath);
-
             // create the audio file using the micosoft speech synthesizer
-            using (var speechSynthesizer = new SpeechSynthesizer(speechConfig))
-            {
-                var speechResult = await speechSynthesizer.SpeakTextAsync(s);
-                Console.WriteLine($"Saving the audio for part {count} of {strings.Length} to a file");
-                using var stream = AudioDataStream.FromResult(speechResult);
-                // saving the audio file
-                await stream.SaveToWaveFileAsync(audioFilePath);
-
-                stream.Dispose();                                     
-            }
+            Console.WriteLine($"Saving the audio for part {count} of {strings.Length} to a file");
+            await Speech.TextToSpeech(s, audioFilePath);
 
             // create the video that combines the audio and image and text
-            // fixing something imageWithTextFilePath
             FFMpeg.PosterWithAudio(imageFilePath, audioFilePath, videoFilePath);
 
             videoFilePaths[count - 1] = videoFilePath;
@@ -154,8 +133,8 @@ class Program
             FFMpeg.Join(finalVidFilePath, videoFilePaths);
         }).Wait();
 
-
-        await Task.Delay(TimeSpan.FromSeconds(15));        
+        // need to esnure the video is done being created
+        await Task.Delay(TimeSpan.FromSeconds(20));        
 
         //upload the final video to youtube
         if(storyTitle != null  && storyDescription != null)
