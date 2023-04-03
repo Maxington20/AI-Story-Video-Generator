@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net.Http;
-using System.Security.Principal;
+﻿using Newtonsoft.Json;
 using Microsoft.CognitiveServices.Speech;
 using FFMpegCore;
-using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 using ChatGptStoryGenerator;
-using System.Security.Cryptography.X509Certificates;
 
 class Program
 {
@@ -86,14 +76,15 @@ class Program
 
         var speechConfig = SpeechConfig.FromSubscription(speechKey, regionKey);
 
-        speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";
+        speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";        
 
         var videoFilePaths = new string[strings.Length];
         var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\final-thing.mp4";
 
         int count = 0;
 
-        await GoogleImageSearch.SearchAndDownloadImage(topic, strings.Length.ToString());
+        // no longer need to download images from google so commenting it out
+        // await GoogleImageSearch.SearchAndDownloadImage(topic, strings.Length.ToString());
 
         foreach(string s in strings )
         {
@@ -108,7 +99,7 @@ class Program
 
             if ( finalPrompt != null )
             {
-                finalPrompt = "a highly detailed, child appropriate cartoon of: " + finalPrompt + " with no words";
+                finalPrompt = "a highly detailed, child appropriate picture of: " + finalPrompt;
             }
 
             // use the prompt to give to midjourney
