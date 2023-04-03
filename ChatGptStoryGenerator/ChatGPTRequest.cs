@@ -27,12 +27,12 @@ namespace ChatGptStoryGenerator
 
                         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        Console.Write("Now hitting the chat gpt api");
+                        Console.Write("Now hitting the chat gpt completion api");
                         var response = await httpClient.PostAsync(url, content);
 
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            Console.WriteLine("\n\nWoohoo we got a 200 response");
+                            Console.WriteLine("\n\nGot 200 response");
                             return await response.Content.ReadAsStringAsync();
                         }
                         else if (retries > 1)
@@ -83,12 +83,12 @@ namespace ChatGptStoryGenerator
 
                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                Console.Write("Now hitting the chat gpt api");
+                Console.Write("Now hitting the chat gpt image generator api");
                 var response = await httpClient.PostAsync(url, content);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    Console.WriteLine("\n\nWoohoo we got a 200 response");
+                    Console.WriteLine("\n\ngot a 200 response");
                     return await response.Content.ReadAsStringAsync();
                 }                
                 else
