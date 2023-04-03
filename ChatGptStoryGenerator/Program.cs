@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net.Http;
-using System.Security.Principal;
+﻿using Newtonsoft.Json;
 using Microsoft.CognitiveServices.Speech;
 using FFMpegCore;
-using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 using ChatGptStoryGenerator;
-using System.Security.Cryptography.X509Certificates;
 
 class Program
 {
@@ -86,7 +76,7 @@ class Program
 
         var speechConfig = SpeechConfig.FromSubscription(speechKey, regionKey);
 
-        speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";
+        speechConfig.SpeechSynthesisVoiceName = "en-US-AnaNeural";        
 
         var videoFilePaths = new string[strings.Length];
         var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\final-thing.mp4";
