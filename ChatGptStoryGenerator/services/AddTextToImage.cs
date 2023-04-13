@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatGptStoryGenerator
+namespace ChatGptStoryGenerator.services
 {
     public static class AddTextToImage
     {
         public static void AddTextToStaticImage(string content, string imageFilePath, string imageWithTextFilePath)
         {
             // Add text to the existing image and resave the image
-            System.Drawing.Image image = System.Drawing.Image.FromFile(imageFilePath);
+            Image image = Image.FromFile(imageFilePath);
 
             // Create a font object
             Font font = new Font("Arial", 24, FontStyle.Bold);

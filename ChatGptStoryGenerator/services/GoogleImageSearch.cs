@@ -10,7 +10,7 @@ using Aspose.Imaging;
 using System.Net;
 using System.Drawing.Imaging;
 
-namespace ChatGptStoryGenerator
+namespace ChatGptStoryGenerator.services
 {
     public static class GoogleImageSearch
     {
@@ -61,7 +61,7 @@ namespace ChatGptStoryGenerator
 
                                     EnsureEvenSize(Path.Combine(downloadPath, fileName));
                                 }
-                                
+
                                 count++;
                             }
                             Console.WriteLine("Done!");
@@ -93,14 +93,14 @@ namespace ChatGptStoryGenerator
                 Console.WriteLine("Failed to download images.");
             }
         }
-        
+
         public static void ResizeImage(string filePath)
         {
             using (Aspose.Imaging.Image image = Aspose.Imaging.Image.Load(filePath))
             {
                 var newHeight = image.Height % 2 == 0 ? image.Height : image.Height + 1;
                 var newWidth = image.Width % 2 == 0 ? image.Width : image.Width + 1;
-                image.Resize(newWidth, newHeight);                
+                image.Resize(newWidth, newHeight);
                 image.Save(filePath);
             }
         }
