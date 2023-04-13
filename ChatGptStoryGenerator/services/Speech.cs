@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatGptStoryGenerator
+namespace ChatGptStoryGenerator.services
 {
     public static class Speech
     {
@@ -40,7 +40,7 @@ namespace ChatGptStoryGenerator
                         using var stream = AudioDataStream.FromResult(speechResult);
                         await stream.SaveToWaveFileAsync(audioFilePath);
                         stream.Dispose();
-                    }                   
+                    }
                     else
                     {
                         Console.WriteLine($"Speech synthesis failed. Reason: {speechResult.Reason}");

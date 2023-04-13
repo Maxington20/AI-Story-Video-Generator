@@ -1,31 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Microsoft.CognitiveServices.Speech;
 using FFMpegCore;
+using ChatGptStoryGenerator.services;
 using ChatGptStoryGenerator;
 
-class Program
+partial class Program
 {
-    public class DataBody
-    {
-        public string model { get; set; }
-        public List<Message> messages { get; set; }
-    }
-
-    public class Message
-    {
-        public string role { get; set; }
-        public string content { get; set; }
-    }
-
-    public class ImagePrompt
-    {
-        public string prompt { get; set; }
-
-        // number of images
-        public int n { get; set; }
-        public string size { get; set; }
-    }
-
     static async Task Main(string[] args)
     {
         // List of topics to choose from
@@ -48,7 +28,7 @@ class Program
 
 
         // generate the story
-        var story = await ChatGPTRequest.MakeChatGPTCompletionRequest(apiKey, url, $"create a ~300 word original children's story about {topic}");
+        var story = await ChatGPTRequest.MakeChatGPTCompletionRequestAsync(apiKey, url, $"create a ~300 word original children's story about {topic}");
 
         if (story == null)
         {
@@ -58,12 +38,12 @@ class Program
         story = result?.choices[0]?.message?.content ?? null;
 
         // generate a title for the story
-        var storyTitle = await ChatGPTRequest.MakeChatGPTCompletionRequest(apiKey, url, $"come up with a name for this story with no heading and no title label ahead of the name: {story}");
+        var storyTitle = await ChatGPTRequest.MakeChatGPTCompletionRequestAsync(apiKey, url, $"come up with a name for this story with no heading and no title label ahead of the name: {story}");
         dynamic titleResult = JsonConvert.DeserializeObject(storyTitle);
         storyTitle = titleResult?.choices[0]?.message?.content ?? null;
 
         // generate the story description
-        var storyDescription = await ChatGPTRequest.MakeChatGPTCompletionRequest(apiKey, url, $"~10 word description of this story: {story}");
+        var storyDescription = await ChatGPTRequest.MakeChatGPTCompletionRequestAsync(apiKey, url, $"~10 word description of this story: {story}");
         dynamic desctiptionResult = JsonConvert.DeserializeObject(storyDescription);
         storyDescription = desctiptionResult?.choices[0]?.message?.content ?? null;
 
@@ -86,7 +66,7 @@ class Program
             count++;
 
             // use chat gpt to create a relevant prompt for midjourney
-            var midjourneyPrompt = await ChatGPTRequest.MakeChatGPTCompletionRequest(apiKey, url, $"~20 word picture description for the following scene: {s}, within the context of the whole story: {story}");
+            var midjourneyPrompt = await ChatGPTRequest.MakeChatGPTCompletionRequestAsync(apiKey, url, $"~20 word picture description for the following scene: {s}, within the context of the whole story: {story}");
             // Parse the JSON response to get the image URLs
             dynamic promptResult = JsonConvert.DeserializeObject(midjourneyPrompt);
 
@@ -97,7 +77,7 @@ class Program
                 finalPrompt = "a highly detailed, child appropriate picture of: " + finalPrompt;
             }           
 
-            var chatGPTImagePrompt = await ChatGPTRequest.MakeChatGPTImageGenrationRequest(apiKey, imageUrl, Convert.ToString(finalPrompt));
+            var chatGPTImagePrompt = await ChatGPTRequest.MakeChatGPTImageGenrationRequestAsync(apiKey, imageUrl, Convert.ToString(finalPrompt));
 
             dynamic imageResponse = JsonConvert.DeserializeObject(chatGPTImagePrompt);
 

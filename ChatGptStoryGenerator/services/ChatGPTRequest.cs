@@ -3,11 +3,11 @@ using System.Net;
 using System.Text;
 using static Program;
 
-namespace ChatGptStoryGenerator
+namespace ChatGptStoryGenerator.services
 {
     public static class ChatGPTRequest
     {
-        public static async Task<string> MakeChatGPTCompletionRequest(string apiKey, string url, string searchContent)
+        public static async Task<string> MakeChatGPTCompletionRequestAsync(string apiKey, string url, string searchContent)
         {
             int retries = 5;
 
@@ -19,7 +19,7 @@ namespace ChatGptStoryGenerator
                     {
                         httpClient.DefaultRequestHeaders.Add("Authorization", apiKey);
 
-                        var body = new DataBody { model = "gpt-3.5-turbo", messages = new List<Message>()};
+                        var body = new DataBody { model = "gpt-3.5-turbo", messages = new List<Message>() };
 
                         body.messages.Add(new Message { role = "user", content = searchContent });
 
@@ -71,13 +71,13 @@ namespace ChatGptStoryGenerator
             return null;
         }
 
-        public static async Task<string> MakeChatGPTImageGenrationRequest(string apiKey, string url, string prompt)
+        public static async Task<string> MakeChatGPTImageGenrationRequestAsync(string apiKey, string url, string prompt)
         {
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", apiKey);
-                
-                var imagePrompt = new ImagePrompt{ n = 1, prompt = prompt, size = "1024x1024"};
+
+                var imagePrompt = new ImagePrompt { n = 1, prompt = prompt, size = "1024x1024" };
 
                 string json = JsonConvert.SerializeObject(imagePrompt);
 
@@ -90,7 +90,7 @@ namespace ChatGptStoryGenerator
                 {
                     Console.WriteLine("\n\ngot a 200 response");
                     return await response.Content.ReadAsStringAsync();
-                }                
+                }
                 else
                 {
                     Console.WriteLine($"Request failed with status code {response.StatusCode} after retrying 5 times.");

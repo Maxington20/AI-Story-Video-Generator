@@ -5,13 +5,13 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatGptStoryGenerator
+namespace ChatGptStoryGenerator.services
 {
     public static class ImageDownloader
     {
         public static async Task DownloadImage(string url, string folderPath, string fileName)
         {
-            string fullPath = System.IO.Path.Combine(folderPath, fileName);
+            string fullPath = Path.Combine(folderPath, fileName);
 
             using (WebClient client = new WebClient())
             {
