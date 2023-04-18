@@ -35,6 +35,10 @@ namespace ChatGptStoryGenerator.services
                             Console.WriteLine("\n\nGot 200 response");
                             return await response.Content.ReadAsStringAsync();
                         }
+                        if(response.StatusCode == HttpStatusCode.TooManyRequests)
+                        {
+                            Thread.Sleep(20000);
+                        }
                         else if (retries > 1)
                         {
                             Console.WriteLine($"Request failed with status code {response.StatusCode}. Retrying {retries - 1} more times.");
