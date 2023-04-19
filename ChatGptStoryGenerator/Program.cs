@@ -23,7 +23,7 @@ partial class Program
             string topic = topics[rand.Next(topics.Count)];
 
             // Use chatgpt API to generate the story
-            string apiKey = "Bearer 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";
+            string apiKey = "Bearer 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";
             string conversation_id = Guid.NewGuid().ToString("N");
             string url = "https://api.openai.com/v1/chat/completions";
             string imageUrl = "https://api.openai.com/v1/images/generations";
@@ -56,7 +56,8 @@ partial class Program
             strings = strings.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
             var videoFilePaths = new string[strings.Length];
-            var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\final-thing.mp4";
+            var dateString = DateTime.Now.ToString();
+            var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}-{dateString}.mp4";
 
             int count = 0;
 
