@@ -77,6 +77,7 @@ namespace ChatGptStoryGenerator.services
 
         public static async Task<string> MakeChatGPTImageGenrationRequestAsync(string apiKey, string url, string prompt)
         {
+            Thread.Sleep(20000);
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", apiKey);
@@ -94,7 +95,7 @@ namespace ChatGptStoryGenerator.services
                 {
                     Console.WriteLine("\n\ngot a 200 response");
                     return await response.Content.ReadAsStringAsync();
-                }
+                }               
                 else
                 {
                     Console.WriteLine($"Request failed with status code {response.StatusCode} after retrying 5 times.");

@@ -13,7 +13,7 @@ partial class Program
         {
             "cat", "dog", "ferret", "chinchilla", "pickle", "tomato", "fish", "octopus", "alligator", "snail", "bumblebee", "shark", "whale", "sloth",
             "bear", "horse", "snake", "walrus", "leopard", "lemur", "elk", "deer", "rooster", "zebra", "fish", "parrot", "owl", "pig", "armadillo", "gopher",
-            "beaver", "bat", "seal", "mouse", "eagle", "crab", "rat", "mole", "rabbit"
+            "beaver", "bat", "seal", "mouse", "eagle", "crab", "rat", "mole", "rabbit", "fox", "mole", "banana"
         };
 
         for(int times = 0; times < 5; times++)
@@ -39,6 +39,8 @@ partial class Program
             dynamic result = JsonConvert.DeserializeObject(story);
             story = result?.choices[0]?.message?.content ?? null;
 
+            story += "\nIf you enjoyed the story, please feel free to like the video, and subscribe to the channel. Have a great day!!";
+
             // generate a title for the story
             var storyTitle = await ChatGPTRequest.MakeChatGPTCompletionRequestAsync(apiKey, url, $"come up with a name for this story with no heading and no title label ahead of the name: {story}");
             dynamic titleResult = JsonConvert.DeserializeObject(storyTitle);
@@ -57,6 +59,8 @@ partial class Program
 
             var videoFilePaths = new string[strings.Length];
             var dateString = DateTime.Now.ToString();
+            dateString = dateString.Replace(" ", "");
+            dateString = dateString.Replace(":", "");
             var finalVidFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}-{dateString}.mp4";
 
             int count = 0;
@@ -87,7 +91,7 @@ partial class Program
                 var imageToDownloadUrl = Convert.ToString(imageResponse.data[0].url);
 
                 // Download the image
-                ImageDownloader.DownloadImage(imageToDownloadUrl, $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\", $"{topic}_{count}.png");
+                ImageDownloader.DownloadImageFromNet(imageToDownloadUrl, $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\", $"{topic}_{count}.png");
 
                 var audioFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\StoryLogs\\{topic}-{count}.wav";
                 var imageFilePath = $"C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\AutomationImages\\{topic}_{count}.png";

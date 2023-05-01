@@ -8,14 +8,23 @@ using System.Threading.Tasks;
 namespace ChatGptStoryGenerator.services
 {
     public static class ImageDownloader
-    {
-        public static async Task DownloadImage(string url, string folderPath, string fileName)
+    {       
+        public static async Task DownloadImageFromNet(string url, string folderPath, string fileName)
         {
             string fullPath = Path.Combine(folderPath, fileName);
-
-            using (WebClient client = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
-                await client.DownloadFileTaskAsync(url, fullPath);
+                // i need to download the image from the url and save it to the folder path 
+                using (HttpResponseMessage response = await client.GetAsync(url))
+                {
+                    using (HttpContent content = response.Content)
+                    {
+                        // read the image bytes from the response
+                        byte[] imageBytes = await content.ReadAsByteArrayAsync();
+                        // write the image bytes to the file
+                        File.WriteAllBytes(fullPath, imageBytes);
+                    }
+                }            
             }
         }
     }
