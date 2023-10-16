@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageDownloader", "ImageDownloader\ImageDownloader.csproj", "{0F082E72-DA38-4A9E-B0F1-A4567899AFCE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGptStoryGenerator", "ChatGptStoryGenerator\ChatGptStoryGenerator.csproj", "{4C1C4A5D-0264-46C6-8C15-C7CE27179BDE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeUploader", "YoutubeUploader\YoutubeUploader.csproj", "{24291421-2003-472E-B826-52FB66DEA2F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0F082E72-DA38-4A9E-B0F1-A4567899AFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F082E72-DA38-4A9E-B0F1-A4567899AFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F082E72-DA38-4A9E-B0F1-A4567899AFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F082E72-DA38-4A9E-B0F1-A4567899AFCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C1C4A5D-0264-46C6-8C15-C7CE27179BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C1C4A5D-0264-46C6-8C15-C7CE27179BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C1C4A5D-0264-46C6-8C15-C7CE27179BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C1C4A5D-0264-46C6-8C15-C7CE27179BDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24291421-2003-472E-B826-52FB66DEA2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24291421-2003-472E-B826-52FB66DEA2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24291421-2003-472E-B826-52FB66DEA2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24291421-2003-472E-B826-52FB66DEA2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

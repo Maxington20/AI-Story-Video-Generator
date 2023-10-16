@@ -24,7 +24,7 @@ namespace ChatGptStoryGenerator.services
                     throw new ArgumentException("Audio file path cannot be null or empty.");
                 }
 
-                var speechKey = "f5c6b2a2ee8343a6a2a4adf91b8d83c9";
+                var speechKey = "testkey";
                 var regionKey = "eastus";
 
                 var speechConfig = SpeechConfig.FromSubscription(speechKey, regionKey);

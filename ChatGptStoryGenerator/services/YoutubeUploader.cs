@@ -17,13 +17,13 @@ namespace ChatGptStoryGenerator
                 video.Snippet = new VideoSnippet();
                 video.Snippet.Title = title;
                 video.Snippet.Description = description;
-                video.Snippet.ChannelId = "UCxcdczLSSuc8a2dWwd25aLg";
+                video.Snippet.ChannelId = "test channel id";
                 video.Status = new VideoStatus();
                 video.Status.PrivacyStatus = "private";
 
                 // Set the authentication credentials.
                 UserCredential credential;
-                using (var stream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\client_secret_71511348519-9r709uh7nuhq1urvlt3slgo3cp2vkhnv.apps.googleusercontent.com.json",
+                using (var stream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\secretkey.apps.googleusercontent.com.json",
                     FileMode.Open, FileAccess.Read))
                 {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(

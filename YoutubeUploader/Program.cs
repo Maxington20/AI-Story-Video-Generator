@@ -10,13 +10,13 @@ using Google.Apis.YouTube.v3;
     video.Snippet = new VideoSnippet();
     video.Snippet.Title = "test title";
     video.Snippet.Description = "yup";
-    video.Snippet.ChannelId = "UC7TlFqGEuc0kXcKBwI-THJg";
+    video.Snippet.ChannelId = "testchannelid";
     video.Status = new VideoStatus();
     video.Status.PrivacyStatus = "private";
 
     // Set the authentication credentials.
     UserCredential credential;
-    using (var stream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\client_secret_71511348519-9r709uh7nuhq1urvlt3slgo3cp2vkhnv.apps.googleusercontent.com.json",
+    using (var stream = new FileStream("C:\\Users\\maxhe\\OneDrive\\Pictures\\Saved Pictures\\client-secret.apps.googleusercontent.com.json",
         FileMode.Open, FileAccess.Read))
     {
         credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(

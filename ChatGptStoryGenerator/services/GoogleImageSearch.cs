@@ -17,8 +17,8 @@ namespace ChatGptStoryGenerator.services
         public static async Task SearchAndDownloadImage(string topic, string number)
         {
             // Use Google Custom Search API to search for images related to the topic
-            string apiKey = "AIzaSyDMg_4iX_gQd9E7WksgsWdfLMT2D4w9o-I";
-            string cx = "11764fb6d23c841e5";
+            string apiKey = "testapikey";
+            string cx = "vx";
             string imgType = "stock";
             string url = $"https://www.googleapis.com/customsearch/v1?q=cartoon%20{topic}&cx={cx}&key={apiKey}&searchType=image&imgType={imgType}&num={number}&fileType=jpg";
 
